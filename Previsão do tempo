@@ -1,0 +1,50 @@
+import requests
+
+api_key = 'sua_chave_de_api_aqui'
+city_name = 'Recife'
+
+# Obtém dados atuais
+url = f'http://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}'
+response = requests.get(url)
+
+if response.status_code == 200:
+    data = response.json()
+
+    # Extrai dados relevantes do JSON
+    temp_kelvin = data['main']['temp']
+    weather_desc = data['weather'][0]['description']
+
+    # Converte temperatura de Kelvin para Celsius
+    temp_celsius = temp_kelvin - 273.15
+
+    # Imprime resultados
+    print(f'Temperatura atual em {city_name}: {temp_celsius:.1f}°C')
+    print(f'Condições climáticas: {weather_desc}')
+else:
+    print('Erro ao acessar API:', response.status_code)
+
+# Obtém previsão para os próximos dias
+url = f'http://api.openweathermap.org/data/2.5/forecast?q={city_name}&appid={api_key}'
+response = requests.get(url)
+
+if response.status_code == 200:
+    data = response.json()
+
+    # Extrai dados relevantes do JSON para os próximos 5 dias
+    forecast = []
+    for entry in data['list'][:5]:
+        timestamp = entry['dt']
+        temp_kelvin = entry['main']['temp']
+        weather_desc = entry['weather'][0]['description']
+        forecast.append({
+            'timestamp': timestamp,
+            'temp_celsius': temp_kelvin - 273.15,
+            'weather_desc': weather_desc
+        })
+
+    # Imprime resultados
+    print('Previsão para os próximos dias:')
+    for i, entry in enumerate(forecast):
+        print(f'Dia {i+1}: {entry["temp_celsius"]:.1f}°C, {entry["weather_desc"]}')
+else:
+    print('Erro ao acessar API:', response.status_code)
