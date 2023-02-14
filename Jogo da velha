@@ -1,0 +1,51 @@
+# Define uma matriz 3x3 para representar o tabuleiro
+tabuleiro = [
+    [None, None, None],
+    [None, None, None],
+    [None, None, None]
+]
+
+# Define o jogador atual (começa com X)
+jogador_atual = "X"
+
+# Loop principal do jogo
+while True:
+    # Imprime o tabuleiro na tela
+    for linha in tabuleiro:
+        print("|".join(linha))
+
+    # Verifica se o jogo acabou
+    vencedor = None
+    for i in range(3):
+        if tabuleiro[i][0] == tabuleiro[i][1] == tabuleiro[i][2] and tabuleiro[i][0] is not None:
+            vencedor = tabuleiro[i][0]
+        if tabuleiro[0][i] == tabuleiro[1][i] == tabuleiro[2][i] and tabuleiro[0][i] is not None:
+            vencedor = tabuleiro[0][i]
+    if tabuleiro[0][0] == tabuleiro[1][1] == tabuleiro[2][2] and tabuleiro[0][0] is not None:
+        vencedor = tabuleiro[0][0]
+    if tabuleiro[0][2] == tabuleiro[1][1] == tabuleiro[2][0] and tabuleiro[0][2] is not None:
+        vencedor = tabuleiro[0][2]
+    if vencedor is not None:
+        print("O vencedor é o jogador", vencedor)
+        break
+
+    # Pede ao jogador para escolher uma posição no tabuleiro
+    jogada_valida = False
+    while not jogada_valida:
+        jogada = input("Jogador " + jogador_atual + ", escolha uma posição (linha,coluna): ")
+        linha, coluna = jogada.split(",")
+        linha = int(linha)
+        coluna = int(coluna)
+        if tabuleiro[linha][coluna] is None:
+            jogada_valida = True
+        else:
+            print("Essa posição já foi escolhida. Escolha outra.")
+
+    # Marca a posição escolhida com o símbolo do jogador atual
+    tabuleiro[linha][coluna] = jogador_atual
+
+    # Alterna para o próximo jogador
+    if jogador_atual == "X":
+        jogador_atual = "O"
+    else:
+        jogador_atual = "X"
