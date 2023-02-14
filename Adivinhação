@@ -1,0 +1,23 @@
+import random
+
+numero_secreto = random.randint(1, 20)
+
+print("Bem-vindo ao jogo de adivinhação!")
+print("Estou pensando em um número entre 1 e 20.")
+
+# Loop para 6 tentativas do jogador
+for tentativa in range(1, 7):
+    print("Tentativa número " + str(tentativa) + ".")
+    chute = int(input("Qual é o seu chute? "))
+
+    if chute < numero_secreto:
+        print("Seu chute é muito baixo.")
+    elif chute > numero_secreto:
+        print("Seu chute é muito alto.")
+    else:
+        break  # O jogador acertou o número!
+
+if chute == numero_secreto:
+    print("Parabéns! Você acertou o número em " + str(tentativa) + " tentativas!")
+else:
+    print("Que pena. O número que eu estava pensando era " + str(numero_secreto) + ". Tente novamente!")
