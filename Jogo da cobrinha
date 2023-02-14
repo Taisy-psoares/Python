@@ -1,0 +1,74 @@
+import pygame
+import random
+
+# Inicializa o Pygame
+pygame.init()
+
+# Define as dimensões da tela do jogo
+largura_tela = 800
+altura_tela = 600
+tela = pygame.display.set_mode((largura_tela, altura_tela))
+
+# Define as cores usadas no jogo
+cor_fundo = (0, 0, 0)
+cor_cobra = (0, 255, 0)
+cor_comida = (255, 0, 0)
+
+# Define as dimensões de cada bloco da cobrinha
+tamanho_bloco = 10
+
+# Define a velocidade inicial da cobrinha
+velocidade = 10
+
+# Define a posição inicial da cobrinha
+posicao_cobra = [(largura_tela/2, altura_tela/2)]
+
+# Define a posição inicial da comida
+posicao_comida = (random.randint(0, largura_tela/tamanho_bloco-1)*tamanho_bloco,
+                  random.randint(0, altura_tela/tamanho_bloco-1)*tamanho_bloco)
+
+# Define a direção inicial da cobrinha
+direcao = "esquerda"
+
+# Loop principal do jogo
+while True:
+    # Verifica se o jogador fechou a janela do jogo
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+
+    # Verifica se o jogador apertou alguma tecla
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        direcao = "esquerda"
+    elif keys[pygame.K_RIGHT]:
+        direcao = "direita"
+    elif keys[pygame.K_UP]:
+        direcao = "cima"
+    elif keys[pygame.K_DOWN]:
+        direcao = "baixo"
+
+    # Move a cobrinha na direção atual
+    if direcao == "esquerda":
+        nova_posicao = (posicao_cobra[0][0]-velocidade, posicao_cobra[0][1])
+    elif direcao == "direita":
+        nova_posicao = (posicao_cobra[0][0]+velocidade, posicao_cobra[0][1])
+    elif direcao == "cima":
+        nova_posicao = (posicao_cobra[0][0], posicao_cobra[0][1]-velocidade)
+    elif direcao == "baixo":
+        nova_posicao = (posicao_cobra[0][0], posicao_cobra[0][1]+velocidade)
+
+    # Adiciona a nova posição da cabeça da cobrinha à lista de posições
+    posicao_cobra = [nova_posicao] + posicao_cobra[:-1]
+
+    # Verifica se a cobrinha comeu a comida
+    if posicao_cobra[0] == posicao_comida:
+        posicao_comida = (random.randint(0, largura_tela/tamanho_bloco-1)*tamanho_bloco,
+                          random.randint(0, altura_tela/tamanho_bloco-1)*tamanho_bloco)
+    else:
+        posicao_cobra = posicao_cobra[:-1]
+
+    # Desenha a tela do jogo
+    tela.fill(cor_fundo)
+    for posicao in posicao_cobra:
+        pygame.draw.rect(tela, cor_cobra, (posicao[0], posicao[1],
