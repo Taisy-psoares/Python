@@ -1,0 +1,42 @@
+import requests
+
+# Lista de países suportados pela API
+countries = [
+    'Argentina', 'Australia', 'Austria', 'Belgium', 'Brazil', 'Canada', 'Chile', 'China',
+    'Colombia', 'Czechia', 'Denmark', 'Finland', 'France', 'Germany', 'Greece', 'Hungary',
+    'India', 'Indonesia', 'Iran', 'Ireland', 'Israel', 'Italy', 'Japan', 'Mexico', 'Netherlands',
+    'Norway', 'Pakistan', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Russia', 'Saudi Arabia',
+    'Serbia', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa', 'South Korea', 'Spain',
+    'Sweden', 'Switzerland', 'Thailand', 'Turkey', 'Ukraine', 'United Arab Emirates',
+    'United Kingdom', 'United States', 'Vietnam'
+]
+
+# Seleciona país a ser pesquisado
+country = input(f'Selecione um país ({", ".join(countries)}): ')
+
+# Verifica se o país selecionado está na lista de países suportados
+if country not in countries:
+    print(f'O país "{country}" não está na lista de países suportados.')
+    exit()
+
+# Faz a requisição para a API
+url = f'https://api.covid19api.com/total/dayone/country/{country}'
+response = requests.get(url)
+
+# Verifica se a requisição foi bem sucedida
+if response.status_code != 200:
+    print(f'Erro ao acessar API: {response.status_code}')
+    exit()
+
+# Extrai os dados do JSON
+data = response.json()
+last_data = data[-1]
+total_cases = last_data['Confirmed']
+total_recovered = last_data['Recovered']
+total_deaths = last_data['Deaths']
+
+# Imprime os resultados
+print(f'País: {country}')
+print(f'Infectados: {total_cases}')
+print(f'Recuperados: {total_recovered}')
+print(f'Mortos: {total_deaths}')
